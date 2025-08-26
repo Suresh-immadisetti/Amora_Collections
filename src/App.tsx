@@ -30,7 +30,8 @@ function App() {
   return (
     <ProductProvider>
       <CartProvider>
-        <Router>
+        {/* Set basename to your GitHub repo name */}
+        <Router basename="/Amora_Collections">
           <div className="min-h-screen bg-white">
             <Routes>
               <Route path="/admin/login" element={<AdminLogin setIsLoggedIn={setIsAdminLoggedIn} />} />
@@ -53,7 +54,7 @@ function App() {
   );
 }
 
-// Create a separate component for the main layout
+// Main layout component
 interface MainLayoutProps {
   onFilterChange: (filteredProducts: any[], filterType?: string) => void;
 }
@@ -71,6 +72,8 @@ function MainLayout({ onFilterChange }: MainLayoutProps) {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
           <Route path="/contact" element={<Contact />} />
+          {/* Redirect unknown paths to home */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
       <Footer />
