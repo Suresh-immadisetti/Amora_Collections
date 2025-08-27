@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://suresh-immadisetti.github.io/Amora_Collections",
+  "homepage": "https://amoracollections.in",   
   "scripts": {
     "dev": "vite",
     "build": "vite build",

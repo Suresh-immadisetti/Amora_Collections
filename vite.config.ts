@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Amora_Collections/',  // 👈 important for GitHub Pages
+  base: '/',  // 👈 since you’re using a custom domain
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
