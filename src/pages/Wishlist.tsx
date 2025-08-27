@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, Trash2, Heart } from 'lucide-react';
 
 const Wishlist: React.FC = () => {
   const { wishlistItems, removeFromWishlist, addToCart } = useCart();
+
+  // Smooth scroll to top when this page is opened
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   if (wishlistItems.length === 0) {
     return (

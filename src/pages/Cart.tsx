@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Minus, Plus, Trash2, ShoppingBag, MessageCircle } from 'lucide-react';
 
@@ -12,6 +12,11 @@ const Cart: React.FC = () => {
     pincode: '',
     notes: ''
   });
+
+  // ✅ Scroll to top on mount with smooth effect
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 999 ? 0 : 99;

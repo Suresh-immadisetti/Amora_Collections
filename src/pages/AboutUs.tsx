@@ -32,7 +32,7 @@ const AboutUs: React.FC = () => {
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6">
-                Amora Collections began as a humble dream in the heart of Hyderabad, where our founder, Swapna, envisioned creating a space where tradition meets contemporary elegance. With over a decade of experience in the textile industry, she noticed a gap in the market for authentic, high-quality ethnic wear that was both accessible and affordable.
+                Amora Collections began as a humble dream in the heart of Hyderabad, where our founder, Uthara, envisioned creating a space where tradition meets contemporary elegance. With over a decade of experience in the textile industry, she noticed a gap in the market for authentic, high-quality ethnic wear that was both accessible and affordable.
               </p>
               <p className="text-lg text-gray-600 mb-6">
                 What started as a small boutique in 2010 has now blossomed into a beloved destination for women seeking exquisite sarees, lehengas, and ethnic ensembles. Our journey has been guided by a simple philosophy: every woman deserves to feel beautiful and confident in clothing that honors her heritage while celebrating her individuality.
