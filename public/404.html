@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
       // Handle SPA routing for GitHub Pages
-      const pathSegments = window.location.pathname.split('/');
-      if (pathSegments.length > 2 || (pathSegments[1] && pathSegments[1] !== '')) {
-        // We're on a deep link, redirect to index.html with the path
-        sessionStorage.setItem('amoraRedirectPath', window.location.pathname + window.location.search);
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      
+      if (path && path !== '/') {
+        // Store the original path for React Router to handle
+        localStorage.setItem('amoraRedirectPath', path);
       }
-      window.location.replace('/');
+      
+      // Redirect to the root where your React app is
+      window.location.href = '/';
     </script>
     <noscript>
       <meta http-equiv="refresh" content="0; URL=/" />
