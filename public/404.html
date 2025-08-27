@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html>
+<head>
     <meta charset="utf-8">
-    <title>AMORA Collections - Redirecting...</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-      // Handle SPA routing for GitHub Pages
-      const path = window.location.pathname + window.location.search + window.location.hash;
-      
-      if (path && path !== '/') {
-        // Store the original path for React Router to handle
-        localStorage.setItem('amoraRedirectPath', path);
-      }
-      
-      // Redirect to the root where your React app is
-      window.location.href = '/';
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+        // Single Page Apps for GitHub Pages
+        var segmentCount = 0;
+        var l = window.location;
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+            l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
     </script>
-    <noscript>
-      <meta http-equiv="refresh" content="0; URL=/" />
-    </noscript>
-  </head>
-  <body>
-    <noscript>
-      <h1>Redirecting to AMORA Collections</h1>
-      <p>If you are not redirected automatically, <a href="/">click here</a>.</p>
-    </noscript>
-  </body>
+    <meta http-equiv="refresh" content="0; URL=/" />
+</head>
+<body>
+    <h1>Redirecting to AMORA Collections</h1>
+    <p>If you are not redirected automatically, <a href="/">click here</a>.</p>
+</body>
 </html>
