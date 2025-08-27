@@ -1,34 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AMORA Collections - Your one-stop shop for trendy fashion and lifestyle products." />
-    <meta name="keywords" content="Fashion, Lifestyle, AMORA Collections, Clothing, Accessories" />
-    <meta name="author" content="Suresh Immadisetti" />
-    
-    <title>AMORA Collections</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    
-    <!-- SEO-friendly Open Graph tags - Updated with absolute URLs -->
-    <meta property="og:title" content="AMORA Collections" />
-    <meta property="og:description" content="Shop trendy fashion and lifestyle products." />
-    <meta property="og:image" content="https://amoracollections.in/logo.png" />
-    <meta property="og:url" content="https://amoracollections.in" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="AMORA Collections" />
-    
-    <!-- Additional recommended meta tags -->
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="robots" content="index, follow" />
-    <script type="module" crossorigin src="/assets/index-CcDwQ2Iy.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CX8_EJQ2.css">
+    <meta charset="utf-8">
+    <title>AMORA Collections - Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      // Handle SPA routing for GitHub Pages
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      
+      if (path && path !== '/') {
+        // Store the original path for React Router to handle
+        localStorage.setItem('amoraRedirectPath', path);
+      }
+      
+      // Redirect to the root where your React app is
+      window.location.href = '/';
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0; URL=/" />
+    </noscript>
   </head>
   <body>
-    <div id="root"></div>
-
-    <!-- React entry point -->
+    <noscript>
+      <h1>Redirecting to AMORA Collections</h1>
+      <p>If you are not redirected automatically, <a href="/">click here</a>.</p>
+    </noscript>
   </body>
 </html>
