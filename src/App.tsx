@@ -30,8 +30,8 @@ function App() {
   return (
     <ProductProvider>
       <CartProvider>
-        {/* Set basename to your GitHub repo name */}
-        <Router basename="/Amora_Collections">
+        {/* Removed basename for custom domain */}
+        <Router>
           <div className="min-h-screen bg-white">
             <Routes>
               <Route path="/admin/login" element={<AdminLogin setIsLoggedIn={setIsAdminLoggedIn} />} />

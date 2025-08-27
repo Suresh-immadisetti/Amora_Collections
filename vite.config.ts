@@ -3,8 +3,13 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',  // 👈 since you’re using a custom domain
+  base: '/',
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  },
+  publicDir: 'public', // This tells Vite where your public files are
 })
