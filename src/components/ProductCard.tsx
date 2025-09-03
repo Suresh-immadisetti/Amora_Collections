@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { Product } from '../types/Product';
 
 interface ProductCardProps {
@@ -8,9 +9,18 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { addToCart, addToWishlist, wishlistItems } = useCart();
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
-  const isInWishlist = wishlistItems.some(item => item.id === product.id);
+  const isWishlisted = isInWishlist(product.id);
+
+  const handleWishlistClick = () => {
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   const handleCashOnDelivery = () => {
     const message = `Hi! I'm interested in ordering ${product.name} (₹${product.price}) with Cash on Delivery. Please provide order details.`;
@@ -40,12 +50,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
         
         <button
-          onClick={() => addToWishlist(product)}
+          onClick={handleWishlistClick}
           className={`absolute top-2 right-2 p-2 rounded-full transition-colors ${
-            isInWishlist ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-red-500 hover:text-white'
+            isWishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-red-500 hover:text-white'
           }`}
         >
-          <Heart className="h-4 w-4" />
+          <Heart className="h-4 w-4" fill={isWishlisted ? 'currentColor' : 'none'} />
         </button>
       </div>
 
@@ -69,7 +79,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span className="text-2xl font-bold text-[#009494]">
               ₹{product.price}
             </span>
-            {product.originalPrice && (
+            {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-gray-400 line-through">
                 ₹{product.originalPrice}
               </span>

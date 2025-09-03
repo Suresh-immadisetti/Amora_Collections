@@ -1,3 +1,4 @@
+// pages/HomePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useProducts } from '../context/ProductContext';
 import ProductCard from '../components/ProductCard';
@@ -5,12 +6,26 @@ import FilterSidebar from '../components/FilterSidebar';
 import HeroSection from '../components/HeroSection';
 import { Filter } from 'lucide-react';
 
-const HomePage: React.FC = () => {
+// Define props interface
+interface HomePageProps {
+  filteredProducts?: any[];
+  onFilterChange?: (filteredProducts: any[], filterType?: string) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ 
+  filteredProducts: externalFilteredProducts, 
+  onFilterChange 
+}) => {
   const { products } = useProducts();
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [internalFilteredProducts, setInternalFilteredProducts] = useState(products);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const productsSectionRef = useRef<HTMLDivElement>(null);
+
+  // Use external filtered products if provided, otherwise use internal state
+  const filteredProducts = externalFilteredProducts !== undefined 
+    ? externalFilteredProducts 
+    : internalFilteredProducts;
 
   // Category data with images
   const categories = [
@@ -44,9 +59,16 @@ const HomePage: React.FC = () => {
   // Handle category click from top section
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    setFilteredProducts(
-      products.filter(p => p.category.toLowerCase() === categoryName.toLowerCase())
+    const newFilteredProducts = products.filter(
+      p => p.category.toLowerCase() === categoryName.toLowerCase()
     );
+    
+    // Update state based on whether we're using external or internal filtering
+    if (onFilterChange) {
+      onFilterChange(newFilteredProducts, 'category');
+    } else {
+      setInternalFilteredProducts(newFilteredProducts);
+    }
 
     // Scroll to products section
     setTimeout(() => {
@@ -59,9 +81,22 @@ const HomePage: React.FC = () => {
   // Update filteredProducts if selectedCategory is cleared
   useEffect(() => {
     if (!selectedCategory) {
-      setFilteredProducts(products);
+      if (onFilterChange) {
+        onFilterChange(products, 'clear');
+      } else {
+        setInternalFilteredProducts(products);
+      }
     }
-  }, [selectedCategory, products]);
+  }, [selectedCategory, products, onFilterChange]);
+
+  // Handle filter changes from the sidebar
+  const handleFilterChange = (newFilteredProducts: any[]) => {
+    if (onFilterChange) {
+      onFilterChange(newFilteredProducts, 'sidebar');
+    } else {
+      setInternalFilteredProducts(newFilteredProducts);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -130,7 +165,7 @@ const HomePage: React.FC = () => {
               )}
               <FilterSidebar 
                 products={products} 
-                onFilterChange={setFilteredProducts} 
+                onFilterChange={handleFilterChange} 
                 selectedCategory={selectedCategory}
                 onCategoryChange={setSelectedCategory}
               />

@@ -1,12 +1,12 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Product } from '../types/Product';
 
 interface FilterSidebarProps {
   products: Product[];
   onFilterChange: (filteredProducts: Product[]) => void;
-  selectedCategory: string | null; // Added
-  onCategoryChange: Dispatch<SetStateAction<string | null>>; // Added
+  selectedCategory: string | null;
+  onCategoryChange: (category: string | null) => void;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
@@ -33,12 +33,18 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const handleCategoryChange = (category: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
-    );
-    onCategoryChange(category); // Update selectedCategory in HomePage
+    const newSelectedCategories = selectedCategories.includes(category)
+      ? selectedCategories.filter(c => c !== category)
+      : [...selectedCategories, category];
+    
+    setSelectedCategories(newSelectedCategories);
+    
+    // Update the single selected category for the HomePage
+    if (newSelectedCategories.length === 1) {
+      onCategoryChange(newSelectedCategories[0]);
+    } else {
+      onCategoryChange(null);
+    }
   };
 
   const handleOccasionChange = (occasion: string) => {
@@ -53,7 +59,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     setSelectedCategories([]);
     setSelectedOccasions([]);
     setPriceRange([0, 10000]);
-    onCategoryChange(null); // Reset selectedCategory
+    onCategoryChange(null);
   };
 
   useEffect(() => {
@@ -80,6 +86,15 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
     onFilterChange(filtered);
   }, [selectedCategories, selectedOccasions, priceRange, products, onFilterChange]);
+
+  // Sync selectedCategories with selectedCategory from HomePage
+  useEffect(() => {
+    if (selectedCategory) {
+      setSelectedCategories([selectedCategory]);
+    } else {
+      setSelectedCategories([]);
+    }
+  }, [selectedCategory]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">

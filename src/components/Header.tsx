@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ShoppingCart, Heart, Menu, X, User, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { useProducts } from '../context/ProductContext';
 import SearchInputWithTypewriter from './SearchInputWithTypewriter';
 import Logo from '../assets/logo.png';
@@ -15,9 +16,11 @@ const Header: React.FC<HeaderProps> = ({ onFilterChange }) => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isOccasionsOpen, setIsOccasionsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { cartItems, wishlistItems } = useCart();
+  const { cartItems } = useCart();
+  const { wishlistItems } = useWishlist();
   const { products } = useProducts();
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
   const searchRef = useRef<HTMLInputElement>(null);
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -62,24 +65,36 @@ const Header: React.FC<HeaderProps> = ({ onFilterChange }) => {
         product.description.toLowerCase().includes(query)
       );
       filterLabel = `Search: ${filterValue}`;
+    } else if (filterType === 'all') {
+      // Show all products - no filtering needed
+      filtered = products;
+      filterLabel = 'All Products';
     }
-    // If filterType is 'all', show all products (no filtering needed)
 
-    onFilterChange(filtered, filterLabel);
+    // If we're not on the home page, navigate to home first
+    if (location.pathname !== '/') {
+      navigate('/');
+      
+      // Use a small timeout to ensure navigation completes before applying filters
+      setTimeout(() => {
+        onFilterChange(filtered, filterLabel);
+        scrollToProductsSection();
+      }, 100);
+    } else {
+      onFilterChange(filtered, filterLabel);
+      scrollToProductsSection();
+    }
+    
     setIsMobileMenuOpen(false);
     setIsCategoriesOpen(false);
     setIsOccasionsOpen(false);
-    
-    // Navigate to home if not already there
-    if (window.location.pathname !== '/') {
-      navigate('/');
-    }
-    
-    // Scroll to products section
+  };
+
+  const scrollToProductsSection = () => {
     setTimeout(() => {
       const productsSection = document.getElementById('products-section');
       if (productsSection) {
-        productsSection.scrollIntoView({ behavior: 'smooth' });
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
   };

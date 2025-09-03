@@ -1,3 +1,4 @@
+// pages/AdminLogin.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User } from 'lucide-react';
@@ -11,7 +12,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setIsLoggedIn }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Hardcoded admin credentials
   const ADMIN_USERNAME = 'admin@amoracollections';
   const ADMIN_PASSWORD = 'Amora@2024!';
 

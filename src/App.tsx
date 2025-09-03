@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
@@ -12,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import Contact from './pages/Contact';
 
 function App() {
@@ -30,41 +32,55 @@ function App() {
   return (
     <ProductProvider>
       <CartProvider>
-        <Router>
-          <div className="min-h-screen bg-white">
-            <Routes>
-              <Route path="/admin/login" element={<AdminLogin setIsLoggedIn={setIsAdminLoggedIn} />} />
-              <Route 
-                path="/admin/dashboard" 
-                element={
-                  isAdminLoggedIn ? 
-                  <AdminDashboard setIsLoggedIn={setIsAdminLoggedIn} /> : 
-                  <Navigate to="/admin/login" />
-                } 
-              />
-              <Route path="/*" element={
-                <MainLayout onFilterChange={handleFilterChange} />
-              } />
-            </Routes>
-          </div>
-        </Router>
+        <WishlistProvider>
+          <Router>
+            <div className="min-h-screen bg-white">
+              <Routes>
+                <Route path="/admin/login" element={<AdminLogin setIsLoggedIn={setIsAdminLoggedIn} />} />
+                <Route 
+                  path="/admin/dashboard" 
+                  element={
+                    isAdminLoggedIn ? 
+                    <AdminDashboard setIsLoggedIn={setIsAdminLoggedIn} /> : 
+                    <Navigate to="/admin/login" />
+                  } 
+                />
+                <Route path="/*" element={
+                  <MainLayout 
+                    onFilterChange={handleFilterChange} 
+                    filteredProducts={filteredProducts}
+                  />
+                } />
+              </Routes>
+            </div>
+          </Router>
+        </WishlistProvider>
       </CartProvider>
     </ProductProvider>
   );
 }
 
-// Main layout component
+// Main layout component with proper typing
 interface MainLayoutProps {
   onFilterChange: (filteredProducts: any[], filterType?: string) => void;
+  filteredProducts: any[];
 }
 
-function MainLayout({ onFilterChange }: MainLayoutProps) {
+const MainLayout: React.FC<MainLayoutProps> = ({ onFilterChange, filteredProducts }) => {
   return (
     <>
       <Header onFilterChange={onFilterChange} />
       <main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route 
+            path="/" 
+            element={
+              <HomePage 
+                filteredProducts={filteredProducts} 
+                onFilterChange={onFilterChange} 
+              />
+            } 
+          />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />

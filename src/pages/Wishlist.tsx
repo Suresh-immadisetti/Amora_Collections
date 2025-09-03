@@ -1,9 +1,12 @@
+// pages/Wishlist.tsx
 import React, { useEffect } from 'react';
+import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, Trash2, Heart } from 'lucide-react';
 
 const Wishlist: React.FC = () => {
-  const { wishlistItems, removeFromWishlist, addToCart } = useCart();
+  const { wishlistItems, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
 
   // Smooth scroll to top when this page is opened
   useEffect(() => {

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+// context/ProductContext.tsx
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Product } from '../types/Product';
 
 interface ProductContextType {
@@ -439,36 +440,65 @@ const defaultProducts: Product[] = [
   }
 ];
 
-export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(defaultProducts);
+const PRODUCTS_STORAGE_KEY = 'amora_products';
 
-  const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = {
+export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    try {
+      const storedProducts = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+      if (storedProducts) {
+        setProducts(JSON.parse(storedProducts));
+      } else {
+        setProducts(defaultProducts);
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(defaultProducts));
+      }
+    } catch (error) {
+      console.error('Error loading products from localStorage:', error);
+      setProducts(defaultProducts);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (products.length > 0) {
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
+      }
+    } catch (error) {
+      console.error('Error saving products to localStorage:', error);
+    }
+  }, [products]);
+
+  const addProduct = useCallback((product: Omit<Product, 'id'>) => {
+    const newProduct: Product = {
       ...product,
       id: Date.now().toString()
     };
     setProducts(prev => [...prev, newProduct]);
-  };
+  }, []);
 
-  const updateProduct = (id: string, updatedProduct: Omit<Product, 'id'>) => {
+  const updateProduct = useCallback((id: string, updatedProduct: Omit<Product, 'id'>) => {
     setProducts(prev => 
       prev.map(product => 
         product.id === id ? { ...updatedProduct, id } : product
       )
     );
-  };
+  }, []);
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = useCallback((id: string) => {
     setProducts(prev => prev.filter(product => product.id !== id));
+  }, []);
+
+  const value: ProductContextType = {
+    products,
+    addProduct,
+    updateProduct,
+    deleteProduct
   };
 
   return (
-    <ProductContext.Provider value={{
-      products,
-      addProduct,
-      updateProduct,
-      deleteProduct
-    }}>
+    <ProductContext.Provider value={value}>
       {children}
     </ProductContext.Provider>
   );

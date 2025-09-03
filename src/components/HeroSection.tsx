@@ -3,8 +3,10 @@ import { ArrowRight } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const scrollToProducts = () => {
-    const productsSection = document.querySelector('section:nth-of-type(2)');
-    productsSection?.scrollIntoView({ behavior: 'smooth' });
+    const productsSection = document.getElementById('products-section');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
